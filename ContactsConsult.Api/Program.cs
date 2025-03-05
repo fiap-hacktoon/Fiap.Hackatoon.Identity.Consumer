@@ -12,6 +12,7 @@ builder.Services.AddDependencyResolver(builder.Configuration.GetConnectionString
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks().ForwardToPrometheus();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddProvider(
@@ -75,6 +76,7 @@ app.UseReDoc(c =>
 
 app.UseListaUserMiddleware();
 
+app.UseHealthChecks("/health");
 app.UseHttpMetrics();
 app.MapMetrics();
 app.UseHttpsRedirection();
