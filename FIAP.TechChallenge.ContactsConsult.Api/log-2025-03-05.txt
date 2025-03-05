@@ -1,0 +1,5 @@
+Log de Execução: Information: 0 - Buscando contatos pelo DDD 21
+Log de Execução: Information: 20101 - Executed DbCommand (3ms) [Parameters=[@__areaCode_0='?' (Size = 2)], CommandType='Text', CommandTimeout='30']
+SELECT `c`.`Id`, `c`.`AreaCode`, `c`.`Email`, `c`.`Name`, `c`.`Phone`
+FROM `Contacts` AS `c`
+WHERE `c`.`AreaCode` = @__areaCode_0
