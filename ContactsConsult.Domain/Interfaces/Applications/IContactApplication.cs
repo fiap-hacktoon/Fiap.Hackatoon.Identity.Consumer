@@ -9,5 +9,7 @@ namespace FIAP.TechChallenge.ContactsConsult.Domain.Interfaces.Applications
         Task<ContactDto?> GetContactByIdAsync(int id);
 
         Task<IEnumerable<ContactDto>> GetContactsByAreaCodeAsync(string areaCode);
+
+        Task<ContactDto?> GetContactByEmailAsync(string email);
     }
 }

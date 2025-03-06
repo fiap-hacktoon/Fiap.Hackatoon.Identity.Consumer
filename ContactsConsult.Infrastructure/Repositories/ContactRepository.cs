@@ -36,6 +36,9 @@ namespace FIAP.TechChallenge.ContactsConsult.Infrastructure.Repositories
         public async Task<IEnumerable<Contact>> GetByAreaCodeAsync(string areaCode)
             => await _context.Contacts.Where(c => c.AreaCode == areaCode).ToListAsync();
 
+        public async Task<IEnumerable<Contact>> GetByEmailAsync(string email)
+            => await _context.Contacts.Where(c => c.Email == email).ToListAsync();
+
         public async Task DeleteAsync(int id)
         {
             var contact = await GetByIdAsync(id);

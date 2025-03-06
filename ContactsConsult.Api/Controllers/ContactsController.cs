@@ -55,7 +55,6 @@ namespace FIAP.TechChallenge.ContactsConsult.Api.Controllers
         [Authorize]
         public async Task<IEnumerable<ContactDto>> GetContactsByDDD(string areaCode)
         {
-            CustomLogger.Arquivo = true;
             _logger.LogInformation("Buscando contatos pelo DDD {DDD}", areaCode);
 
             try
@@ -66,6 +65,28 @@ namespace FIAP.TechChallenge.ContactsConsult.Api.Controllers
             {
                 _logger.LogError(ex.Message, ex);
                 return Enumerable.Empty<ContactDto>();
+            }
+        }
+
+        /// <summary>
+        /// Método para buscar contatos por Email de forma assíncrona.
+        /// </summary>
+        /// <param name="areaCode"> informar o Email do contato</param>
+        /// <returns> Retorna uma lista de contatos filtrados pelo Email no formato Json</returns>
+        [HttpGet("email/{email}")]
+        [Authorize]
+        public async Task<ActionResult<ContactDto>> GetContactByEmailAsync(string email)
+        {
+            _logger.LogInformation("Buscando contatos pelo Email {Email}", email);
+
+            try
+            {
+                return await _contactService.GetContactByEmailAsync(email);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                return null;
             }
         }
     }

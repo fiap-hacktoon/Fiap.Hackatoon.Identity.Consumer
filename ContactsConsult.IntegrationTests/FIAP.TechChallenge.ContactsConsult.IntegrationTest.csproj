@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ContactsConsult.Api\FIAP.TechChallenge.ContactsConsult.Api.csproj" />
     <ProjectReference Include="..\ContactsConsult.Application\FIAP.TechChallenge.ContactsConsult.Application.csproj" />
     <ProjectReference Include="..\ContactsConsult.Infrastructure\FIAP.TechChallenge.ContactsConsult.Infrastructure.csproj" />
   </ItemGroup>

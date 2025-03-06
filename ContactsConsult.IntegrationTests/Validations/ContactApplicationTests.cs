@@ -61,5 +61,67 @@ namespace FIAP.TechChallenge.ContactsConsult.IntegrationTest.Validations
             var contactList = await _contactApplicationException.GetAllContactsAsync();
             Assert.Null(contactList);
         }
+
+        [Fact]
+        public async Task GetContactByIdExceptionAsync()
+        {
+            var contact1 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact2 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact3 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+
+            await _context.AddRangeAsync(contact1, contact2, contact3);
+
+            await SaveChanges();
+
+            var contactList = await _contactApplicationException.GetContactByIdAsync(contact2.Id);
+            Assert.Null(contactList);
+        }
+
+        [Fact]
+        public async Task GetContactByIdSuccessAsync()
+        {
+            var contact1 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact2 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact3 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+
+            await _context.AddRangeAsync(contact1, contact2, contact3);
+
+            await SaveChanges();
+
+            var contactList = await _contactApplication.GetContactByIdAsync(contact2.Id);
+            Assert.NotNull(contactList);
+            Assert.Equal(contactList.Id, contact2.Id);
+        }
+
+        [Fact]
+        public async Task GetContactByAreaCodeExceptionAsync()
+        {
+            var contact1 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact2 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact3 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+
+            await _context.AddRangeAsync(contact1, contact2, contact3);
+
+            await SaveChanges();
+
+            var contactList = await _contactApplicationException.GetContactsByAreaCodeAsync(contact2.AreaCode);
+            Assert.Null(contactList);
+        }
+
+        [Fact]
+        public async Task GetContactByAreaCodeSuccessAsync()
+        {
+            var contact1 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact2 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact3 = ContactFixtures.CreateFakeContact(RandomId.Next(999999999));
+
+            await _context.AddRangeAsync(contact1, contact2, contact3);
+
+            await SaveChanges();
+
+            var contactList = await _contactApplication.GetContactsByAreaCodeAsync(contact2.AreaCode);
+            Assert.NotNull(contactList);
+            Assert.NotEmpty(contactList);
+        }
     }
 }

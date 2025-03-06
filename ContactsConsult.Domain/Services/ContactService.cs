@@ -30,10 +30,10 @@ namespace FIAP.TechChallenge.ContactsConsult.Domain.Services
             {
                 return await _contactRepository.GetAllAsync();
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 var message = $"Some error occour when trying to get all contacts in database.";
-                _logger.LogError(message);
+                _logger.LogError(message, e);
                 throw new Exception(message);
             }
         }
@@ -44,10 +44,27 @@ namespace FIAP.TechChallenge.ContactsConsult.Domain.Services
             {
                 return await _contactRepository.GetByAreaCodeAsync(areaCode);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 var message = $"Some error occour when trying to get a contact by Area Code with Code: {areaCode} Contact.";
-                _logger.LogError(message);
+                _logger.LogError(message, e);
+                throw new Exception(message);
+            }
+        }
+
+        public async Task<Contact> GetEmailCodeAsync(string email)
+        {
+            try
+            {
+                var contactEmailList = await _contactRepository.GetByEmailAsync(email);
+                return contactEmailList != null && contactEmailList.Any() ? 
+                       contactEmailList.FirstOrDefault() : 
+                       null;
+            }
+            catch (Exception e)
+            {
+                var message = $"Some error occour when trying to get a contact by Area Code with Email: {email} Contact.";
+                _logger.LogError(message, e);
                 throw new Exception(message);
             }
         }
