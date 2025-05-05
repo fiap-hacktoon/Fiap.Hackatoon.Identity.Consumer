@@ -1,0 +1,39 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubernetes-api-deployment  # Nome do Deployment
+  annotations:
+    autor: Marcelo Cedro  # Anotação opcional
+spec:
+  replicas: 3  # Número de réplicas do pod
+  selector:
+    matchLabels:
+      app: kubernetes-api  # Seleciona os pods com esse label
+  template:
+    metadata:
+      labels:
+        app: kubernetes-api  # Label usado para associar o Deployment aos pods
+    spec:
+      containers:
+      - name: kubernetes-api  # Nome do container
+        image: maxcedro/contactsconsult:1  # Imagem da aplicação
+        ports:
+        - containerPort: 8080  # Porta do container
+        resources:
+          limits:
+            cpu: 0.5  # Limite de CPU
+            memory: 512Mi  # Limite de memória
+          requests:
+            cpu: 0.2  # Requisição mínima de CPU
+            memory: 256Mi  # Requisição mínima de memória
+        env:
+        - name: DefaultConnection  # Variável de ambiente para a string de conexão
+          valueFrom:
+            secretKeyRef:  # Obtém o valor do Secret
+              name: app-secrets  # Nome do Secret
+              key: DefaultConnection  # A chave no Secret
+        - name: SecretJWT  # Variável de ambiente para a chave JWT
+          valueFrom:
+            secretKeyRef:  # Obtém o valor do Secret
+              name: app-secrets  # Nome do Secret
+              key: SecretJWT  # A chave no Secret
