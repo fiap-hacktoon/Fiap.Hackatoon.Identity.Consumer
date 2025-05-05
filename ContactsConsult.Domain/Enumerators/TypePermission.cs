@@ -5,6 +5,7 @@
         Admin,
         User,
         Guest,
-        Banned
+        Banned,
+        Accepted
     }
 }
