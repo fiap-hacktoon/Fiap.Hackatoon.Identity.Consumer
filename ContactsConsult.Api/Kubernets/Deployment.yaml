@@ -21,13 +21,13 @@ spec:
         - containerPort: 8080  # Porta do container
         resources:
           limits:
-            cpu: 0.5  # Limite de CPU
+            cpu: "0.5"  # Limite de CPU
             memory: 512Mi  # Limite de memória
           requests:
-            cpu: 0.2  # Requisição mínima de CPU
+            cpu: "0.2"  # Requisição mínima de CPU
             memory: 256Mi  # Requisição mínima de memória
         env:
-        - name: DefaultConnection  # Variável de ambiente para a string de conexão
+        - name: ConnectionStrings__DefaultConnection  # Variável de ambiente para a string de conexão
           valueFrom:
             secretKeyRef:  # Obtém o valor do Secret
               name: app-secrets  # Nome do Secret
