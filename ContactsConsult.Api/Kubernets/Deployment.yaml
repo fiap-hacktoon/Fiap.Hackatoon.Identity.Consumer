@@ -1,39 +1,52 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kubernetes-api-deployment  # Nome do Deployment
+  name: kubernetes-api-deployment
   annotations:
-    autor: Marcelo Cedro  # Anotação opcional
+    autor: Marcelo Cedro
 spec:
-  replicas: 3  # Número de réplicas do pod
+  replicas: 3  # Número de réplicas (pods) da aplicação
   selector:
     matchLabels:
-      app: kubernetes-api  # Seleciona os pods com esse label
+      app: kubernetes-api
   template:
     metadata:
       labels:
-        app: kubernetes-api  # Label usado para associar o Deployment aos pods
+        app: kubernetes-api
     spec:
       containers:
-      - name: kubernetes-api  # Nome do container
-        image: maxcedro/contactsconsult:1  # Imagem da aplicação
+      - name: kubernetes-api
+        image: maxcedro/contactsconsult:1  # Imagem Docker da sua API
         ports:
-        - containerPort: 8080  # Porta do container
+        - containerPort: 8080  # Porta exposta dentro do container
         resources:
           limits:
-            cpu: 0.5  # Limite de CPU
-            memory: 512Mi  # Limite de memória
+            cpu: "0.5"        # Limite máximo de CPU
+            memory: 512Mi   # Limite máximo de memória
           requests:
-            cpu: 0.2  # Requisição mínima de CPU
-            memory: 256Mi  # Requisição mínima de memória
+            cpu: "0.2"        # Recurso mínimo reservado de CPU
+            memory: 256Mi   # Recurso mínimo reservado de memória
+
+        # Variáveis de ambiente injetadas via Secret
         env:
-        - name: DefaultConnection  # Variável de ambiente para a string de conexão
-          valueFrom:
-            secretKeyRef:  # Obtém o valor do Secret
-              name: app-secrets  # Nome do Secret
-              key: DefaultConnection  # A chave no Secret
-        - name: SecretJWT  # Variável de ambiente para a chave JWT
-          valueFrom:
-            secretKeyRef:  # Obtém o valor do Secret
-              name: app-secrets  # Nome do Secret
-              key: SecretJWT  # A chave no Secret
+          - name: ConnectionStrings__DefaultConnection
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: DefaultConnection
+
+          - name: SecretJWT
+            valueFrom:
+              secretKeyRef:
+                name: app-secrets
+                key: SecretJWT
+
+        # 🩺 Liveness Probe: Verifica se o container ainda está saudável
+        # Se falhar consecutivamente, o pod será reiniciado
+        livenessProbe:
+          httpGet:
+            path: /health  # Endpoint da sua API que indica saúde
+            port: 8080     # Porta onde o serviço está ouvindo
+          initialDelaySeconds: 15  # Tempo inicial de espera antes de iniciar o primeiro check
+          periodSeconds: 10        # Frequência com que o check será feito
+          failureThreshold: 3      # Número de falhas consecutivas antes de reiniciar o pod

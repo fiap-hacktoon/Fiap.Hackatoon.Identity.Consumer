@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 namespace FIAP.TechChallenge.ContactsConsult.Infrastructure.Repositories
 {
     public class ContactRepository : IContactRepository
-
     {
         private readonly ContactsDbContext _context;
 
