@@ -10,20 +10,20 @@ ENV ASPNETCORE_ENVIRONMENT=Development
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["ContactsConsult.Api/FIAP.TechChallenge.ContactsConsult.Api.csproj", "ContactsConsult.Api/"]
-COPY ["ContactsConsult.Application/FIAP.TechChallenge.ContactsConsult.Application.csproj", "ContactsConsult.Application/"]
-COPY ["ContactsConsult.Domain/FIAP.TechChallenge.ContactsConsult.Domain.csproj", "ContactsConsult.Domain/"]
-COPY ["ContactsConsult.Infrastructure/FIAP.TechChallenge.ContactsConsult.Infrastructure.csproj", "ContactsConsult.Infrastructure/"]
-RUN dotnet restore "./ContactsConsult.Api/FIAP.TechChallenge.ContactsConsult.Api.csproj"
+COPY ["UserHub.Api/FIAP.TechChallenge.UserHub.Api.csproj", "UserHub.Api/"]
+COPY ["UserHub.Application/FIAP.TechChallenge.UserHub.Application.csproj", "UserHub.Application/"]
+COPY ["UserHub.Domain/FIAP.TechChallenge.UserHub.Domain.csproj", "UserHub.Domain/"]
+COPY ["UserHub.Infrastructure/FIAP.TechChallenge.UserHub.Infrastructure.csproj", "UserHub.Infrastructure/"]
+RUN dotnet restore "./UserHub.Api/FIAP.TechChallenge.UserHub.Api.csproj"
 COPY . .
-WORKDIR "/src/ContactsConsult.Api"
-RUN dotnet build "./FIAP.TechChallenge.ContactsConsult.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/UserHub.Api"
+RUN dotnet build "./FIAP.TechChallenge.UserHub.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./FIAP.TechChallenge.ContactsConsult.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./FIAP.TechChallenge.UserHub.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FIAP.TechChallenge.ContactsConsult.Api.dll"]
+ENTRYPOINT ["dotnet", "FIAP.TechChallenge.UserHub.Api.dll"]
