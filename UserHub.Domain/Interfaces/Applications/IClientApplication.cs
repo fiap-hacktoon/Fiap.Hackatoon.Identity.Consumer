@@ -4,6 +4,8 @@ namespace FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications
 {
     public interface IClientApplication
     {
+        Task AddClientAsync(ClientCreateDto clientDto);
+        Task UpdateClientAsync(ClientUpdateDto clientDto);
         Task<IEnumerable<ClientDto>> GetAllClientsAsync();
         Task<ClientDto?> GetClientByIdAsync(int id);
         Task<ClientDto?> GetClientByEmailAsync(string email);

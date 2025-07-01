@@ -1,4 +1,5 @@
 ﻿using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
+using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Enumerators;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Services;
@@ -105,6 +106,48 @@ namespace FIAP.TechChallenge.UserHub.Application.Applications
             {
                 _logger.LogError($"Ocorreu um erro na consulta dos funcionários por cargo. Erro: {e.Message}");
                 return null;
+            }
+        }
+
+        public async Task AddEmployeeAsync(EmployeeCreateDto employeeDto)
+        {
+            try
+            {
+                var employee = new Employee
+                {
+                    Creation = DateTime.Now,
+                    Email = employeeDto.Email,
+                    Name = employeeDto.Name,
+                    Password = employeeDto.Password,
+                    TypeRole = (int)employeeDto.TypeRole
+                };
+
+                await _employeeService.AddEmployeeAsync(employee);
+                
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Ocorreu um erro na consulta de todos os funcionários. Erro: {e.Message}");
+            }
+        }
+
+        public async Task UpdateEmployeeAsync(EmployeeUpdateDto employeeDto)
+        {
+            try
+            {
+                var employee = new Employee
+                {
+                    Creation = DateTime.Now,
+                    Email = employeeDto.Email,
+                    Name = employeeDto.Name,
+                    TypeRole = (int)employeeDto.TypeRole
+                };
+
+                await _employeeService.UpdateEmployeeAsync(employee);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Ocorreu um erro ao atualizar os funcionários. Erro: {e.Message}");
             }
         }
     }

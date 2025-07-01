@@ -10,6 +10,34 @@ namespace FIAP.TechChallenge.UserHub.Domain.Services
         private readonly IClientRepository _contactRepository = contactRepository;
         private readonly ILogger<ClientService> _logger = logger;
 
+        public async Task AddAsync(Client contact)
+        {
+            try
+            {
+                await _contactRepository.AddAsync(contact);
+            }
+            catch (Exception e)
+            {
+                var message = $"Some error occour when trying to add contacts in database.";
+                _logger.LogError(message, e);
+                throw new Exception(message);
+            }
+        }
+
+        public async Task UpdateAsync(Client contact)
+        {
+            try
+            {
+                await _contactRepository.UpdateAsync(contact);
+            }
+            catch (Exception e)
+            {
+                var message = $"Some error occour when trying to update contacts in database.";
+                _logger.LogError(message, e);
+                throw new Exception(message);
+            }
+        }
+
         public async Task<Client> GetByIdAsync(int id)
         {
             try
@@ -53,6 +81,6 @@ namespace FIAP.TechChallenge.UserHub.Domain.Services
                 _logger.LogError(message, e);
                 throw new Exception(message);
             }
-        }
+        }        
     }
 }

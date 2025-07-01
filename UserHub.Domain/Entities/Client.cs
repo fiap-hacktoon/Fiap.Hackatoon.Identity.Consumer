@@ -25,9 +25,12 @@ namespace FIAP.TechChallenge.UserHub.Domain.Entities
         [StringLength(100, ErrorMessage = "Email não pode ter mais de 100 caracteres")]
         public required string Email { get; set; }
 
-        [Required(ErrorMessage = "Password é obrigatório")]
+        //[Required(ErrorMessage = "Password é obrigatório")]
+        //[StringLength(250, ErrorMessage = "Password não pode ter mais de 250 caracteres")]
+        //public required string Password { get; set; }
+        
         [StringLength(250, ErrorMessage = "Password não pode ter mais de 250 caracteres")]
-        public required string Password { get; set; }        
+        public string Password { get; set; }
         public DateOnly Birth { get; set; }
         [DataType(DataType.DateTime)]
         public required DateTime Creation { get; set; }

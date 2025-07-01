@@ -26,9 +26,9 @@ namespace FIAP.TechChallenge.UserHub.Domain.Entities
         [EmailAddress(ErrorMessage = "Email inválido")]
         public required string Email { get; set; }
 
-        [Required(ErrorMessage = "Password é obrigatório")]
+        //[Required(ErrorMessage = "Password é obrigatório")]
         [StringLength(50, ErrorMessage = "Password não pode ter mais de 50 caracteres")]
-        public required string Password { get; set; }
+        public string Password { get; set; }
 
         [DataType(DataType.DateTime)]
         public required DateTime Creation { get; set; }

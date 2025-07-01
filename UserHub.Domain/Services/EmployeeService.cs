@@ -1,8 +1,10 @@
-﻿using FIAP.TechChallenge.UserHub.Domain.Entities;
+﻿using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
+using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Enumerators;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Repositories;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Services;
 using Microsoft.Extensions.Logging;
+using System.Data;
 
 namespace FIAP.TechChallenge.UserHub.Domain.Services
 {
@@ -65,6 +67,34 @@ namespace FIAP.TechChallenge.UserHub.Domain.Services
             catch (Exception e)
             {
                 var message = $"Some error occour when trying to get a employee by Role with : {role} employee.";
+                _logger.LogError(message, e);
+                throw new Exception(message);
+            }
+        }        
+
+        public async Task AddEmployeeAsync(Employee employee)
+        {
+            try
+            {
+                await _employeeRepository.AddAsync(employee);
+            }
+            catch (Exception e)
+            {
+                var message = $"Some error occour when trying to add employee.";
+                _logger.LogError(message, e);
+                throw new Exception(message);
+            }
+        }
+
+        public async Task UpdateEmployeeAsync(Employee employee)
+        {
+            try
+            {
+                await _employeeRepository.UpdateAsync(employee);
+            }
+            catch (Exception e)
+            {
+                var message = $"Some error occour when trying to update employee.";
                 _logger.LogError(message, e);
                 throw new Exception(message);
             }
