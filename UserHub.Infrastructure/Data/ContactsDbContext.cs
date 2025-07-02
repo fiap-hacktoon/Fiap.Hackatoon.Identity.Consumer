@@ -11,10 +11,7 @@ namespace FIAP.TechChallenge.UserHub.Infrastructure.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-                optionsBuilder.UseMySql("DefaultConnection",
-                                        new MySqlServerVersion(new Version(8, 0, 21)),
-                                        mySqlOptions => mySqlOptions.MigrationsAssembly("FIAP.TechChallenge.UserHub.Infrastructure"));
+            
         }
 
         public DbSet<Client> Clients { get; set; }

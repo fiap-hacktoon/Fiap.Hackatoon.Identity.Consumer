@@ -1,4 +1,5 @@
-﻿using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
+﻿using Fiap.Hackatoon.Shared.Dto;
+using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
 using MassTransit;
 
@@ -15,12 +16,12 @@ namespace FIAP.TechChallenge.UserHub.Api.Events
 
         public async Task Consume(ConsumeContext<ClientCreateDto> context)
         {
-            var dto = context.Message;
+            //var dto = context.Message;
 
-            // Exemplo de uso
-            var exists = await _clientService.GetClientByEmailAsync(dto.Email);
-            if (exists != null)
-                return;
+            //// Exemplo de uso
+            //var exists = await _clientService.GetClientByEmailAsync(dto.Email);
+            //if (exists != null)
+            //    return;
 
             await _clientService.AddClientAsync(context.Message);
         }

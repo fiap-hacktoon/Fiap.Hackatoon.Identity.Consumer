@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Prometheus;
+using System.Drawing;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,18 +80,14 @@ var queueEmployeeUpdate = configuration.GetSection("MassTransit:QueueNameEmploye
 var server = configuration.GetSection("MassTransit:Server").Value ?? string.Empty;
 var user = configuration.GetSection("MassTransit:User").Value ?? string.Empty;
 var password = configuration.GetSection("MassTransit:Password").Value ?? string.Empty;
+var port = configuration.GetSection("MassTransit:Port").Value ?? string.Empty;
 
 builder.Services.AddMassTransit(x =>
 {
-    // Registra todos os consumers
-    x.AddConsumer<ClientAddConsumer>();
-    x.AddConsumer<ClientUpdateConsumer>();
-    x.AddConsumer<EmployeeAddConsumer>();
-    x.AddConsumer<EmployeeUpdateConsumer>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
-        cfg.Host(server, "/", h =>
+        cfg.Host(new Uri($"amqp://{server}:{port}"), "/", h =>
         {
             h.Username(user);
             h.Password(password);
@@ -99,7 +96,7 @@ builder.Services.AddMassTransit(x =>
         // Configura fila e consumer do CLIENTE - CREATE
         cfg.ReceiveEndpoint(queueClientCreate, e =>
         {
-            e.ConfigureConsumer<ClientAddConsumer>(context);
+            e.ConfigureConsumer<ClientAddConsumer>(context);            
         });
 
         // Configura fila e consumer do CLIENTE - UPDATE
@@ -119,33 +116,17 @@ builder.Services.AddMassTransit(x =>
         {
             e.ConfigureConsumer<EmployeeUpdateConsumer>(context);
         });
+
+        cfg.ConfigureEndpoints(context);
     });
+
+
+    // Registra todos os consumers
+    x.AddConsumer<ClientAddConsumer>();
+    x.AddConsumer<ClientUpdateConsumer>();
+    x.AddConsumer<EmployeeAddConsumer>();
+    x.AddConsumer<EmployeeUpdateConsumer>();
 });
-
-
-//builder.Services.AddMassTransit(x =>
-//{
-//    x.AddConsumer<ClientAddConsumer>();
-//    x.AddConsumer<ClientUpdateConsumer>();
-
-//    x.UsingRabbitMq((context, cfg) =>
-//    {
-//        cfg.Host(server, "/", h =>
-//        {
-//            h.Username(user);
-//            h.Password(password);
-//        });
-
-//        cfg.ReceiveEndpoint(queueClientCreate, e =>
-//        {
-//            e.ConfigureConsumer<ClientAddConsumer>(context);
-//        });
-//        cfg.ReceiveEndpoint(queueClientUpdate, e =>
-//        {
-//            e.ConfigureConsumer<ClientUpdateConsumer>(context);
-//        });
-//    });
-//});
 
 
 var app = builder.Build();

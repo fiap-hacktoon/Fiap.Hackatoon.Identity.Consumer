@@ -2,10 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
-namespace FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs
+namespace Fiap.Hackatoon.Shared.Dto
 {
     [ExcludeFromCodeCoverage]
-    public class ClientCreateDto
+    public class ClientCreateDto: Event
     {
         [Required(ErrorMessage = "O campo role é obrigatório")]
         public TypeRole TypeRole { get; set; }

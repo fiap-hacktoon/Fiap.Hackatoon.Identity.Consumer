@@ -14,14 +14,7 @@ namespace FIAP.TechChallenge.UserHub.Api.Events
         }
 
         public async Task Consume(ConsumeContext<EmployeeCreateDto> context)
-        {
-            var dto = context.Message;
-
-            // Exemplo de uso
-            var exists = await _employeeService.GetEmployeeByEmailAsync(dto.Email);
-            if (exists is null)
-                return;
-
+        {           
             await _employeeService.AddEmployeeAsync(context.Message);
         }
     }

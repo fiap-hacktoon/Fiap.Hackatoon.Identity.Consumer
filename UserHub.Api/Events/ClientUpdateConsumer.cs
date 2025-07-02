@@ -14,14 +14,7 @@ namespace FIAP.TechChallenge.UserHub.Api.Events
         }
 
         public async Task Consume(ConsumeContext<ClientUpdateDto> context)
-        {
-            var dto = context.Message;
-
-            // Exemplo de uso
-            var exists = await _clientService.GetClientByEmailAsync(dto.Email);
-            if (exists is null)
-                return;
-
+        {        
             await _clientService.UpdateClientAsync(context.Message);
         }
     }
