@@ -1,7 +1,11 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: minha-configmap
+  name: identity-consumer-configmap
 data:
-  ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=ContactsDb;User=grupo10;Password=yourpassword;"
-  SecretJWT: "MBAFIAPabcdefghijlmnopqrstuvxz123456789"
+  Server: "rabbitmq-clusterip"
+  Port: "5672"
+  QueueNameClienteCreate: "ClienteCreate"
+  QueueNameClienteUpdate: "ClienteUpdate"
+  QueueNameEmployeeCreate: "EmployeeCreate"
+  QueueNameEmployeeUpdate: "EmployeeUpdate"

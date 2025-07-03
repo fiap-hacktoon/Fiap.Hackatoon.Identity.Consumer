@@ -1,22 +1,22 @@
 ﻿apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kubernetes-api-deployment
+  name: identity-consumer-api-deployment
   annotations:
     autor: Marcelo Cedro
 spec:
   replicas: 3  # Número de réplicas (pods) da aplicação
   selector:
     matchLabels:
-      app: kubernetes-api
+      app: identity-consumer-api
   template:
     metadata:
       labels:
-        app: kubernetes-api
+        app: identity-consumer-api
     spec:
       containers:
-      - name: kubernetes-api
-        image: maxcedro/UserHub:1  # Imagem Docker da sua API
+      - name: identity-consumer-api
+        image: rmahlow/fiaphackatoonidentityconsumerapi:2.0  # Imagem Docker da sua API
         ports:
         - containerPort: 8080  # Porta exposta dentro do container
         resources:
@@ -29,17 +29,56 @@ spec:
 
         # Variáveis de ambiente injetadas via Secret
         env:
-          - name: ConnectionStrings__DefaultConnection
-            valueFrom:
-              secretKeyRef:
-                name: app-secrets
-                key: DefaultConnection
-
-          - name: SecretJWT
-            valueFrom:
-              secretKeyRef:
-                name: app-secrets
-                key: SecretJWT
+        - name: ConnectionStrings__DefaultConnection
+          valueFrom:
+            secretKeyRef:
+              name: identity-api-consumer-secrets
+              key: DefaultConnection
+        - name: SecretJWT
+          valueFrom:
+            secretKeyRef:
+              name: identity-api-consumer-secrets
+              key: SecretJWT
+        - name: MassTransit__UserName
+          valueFrom:
+            secretKeyRef:
+              name: identity-api-consumer-secrets
+              key: User
+        - name: MassTransit__Password
+          valueFrom:
+            secretKeyRef:
+              name: identity-api-consumer-secrets
+              key: Password              
+        - name: MassTransit__HostName
+          valueFrom:
+            configMapKeyRef: 
+              name: identity-consumer-configmap
+              key: "Server"
+        - name: MassTransit__Port
+          valueFrom:
+            configMapKeyRef: 
+              name: identity-consumer-configmap
+              key: "Port"                              
+        - name: MassTransit__QueueNameClienteCreate
+          valueFrom:
+            configMapKeyRef: 
+              name: identity-consumer-configmap
+              key: "QueueNameClienteCreate"   
+        - name: MassTransit__QueueNameClienteUpdate
+          valueFrom:
+            configMapKeyRef: 
+              name: identity-consumer-configmap
+              key: "QueueNameClienteUpdate"   
+        - name: MassTransit__QueueNameEmployeeCreate
+          valueFrom:
+            configMapKeyRef: 
+              name: identity-consumer-configmap
+              key: "QueueNameEmployeeCreate"   
+        - name: MassTransit__QueueNameEmployeeUpdate
+          valueFrom:
+            configMapKeyRef: 
+              name: identity-consumer-configmap
+              key: "QueueNameEmployeeUpdate"   
 
         # 🩺 Liveness Probe: Verifica se o container ainda está saudável
         # Se falhar consecutivamente, o pod será reiniciado
