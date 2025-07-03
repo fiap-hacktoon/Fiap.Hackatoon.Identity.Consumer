@@ -31,8 +31,6 @@ namespace FIAP.TechChallenge.UserHub.Domain.Entities
         public string Password { get; set; }
 
         [DataType(DataType.DateTime)]
-        public required DateTime Creation { get; set; }
-
-        public TypePermission Permission { get; set; }
+        public required DateTime Creation { get; set; }        
     }
 }

@@ -1,4 +1,5 @@
-﻿using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
+﻿using Fiap.Hackatoon.Shared.Dto;
+using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
 using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Enumerators;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
@@ -109,7 +110,7 @@ namespace FIAP.TechChallenge.UserHub.Application.Applications
             }
         }
 
-        public async Task AddEmployeeAsync(EmployeeCreateDto employeeDto)
+        public async Task AddEmployeeAsync(EmployeeCreateEvent employeeDto)
         {
             try
             {
@@ -131,17 +132,15 @@ namespace FIAP.TechChallenge.UserHub.Application.Applications
             }
         }
 
-        public async Task UpdateEmployeeAsync(EmployeeUpdateDto employeeDto)
+        public async Task UpdateEmployeeAsync(EmployeeUpdateEvent employeeDto)
         {
             try
             {
-                var employee = new Employee
-                {
-                    Creation = DateTime.Now,
-                    Email = employeeDto.Email,
-                    Name = employeeDto.Name,
-                    TypeRole = (int)employeeDto.TypeRole
-                };
+                var employee =  await _employeeService.GetByIdAsync(employeeDto.Id);
+
+                employee.Email = employeeDto.Email;
+                employee.Name = employeeDto.Name;
+                employee.TypeRole = employee.TypeRole;                
 
                 await _employeeService.UpdateEmployeeAsync(employee);
             }

@@ -5,7 +5,7 @@ using MassTransit;
 
 namespace FIAP.TechChallenge.UserHub.Api.Events
 {
-    public class ClientAddConsumer : IConsumer<ClientCreateDto>
+    public class ClientAddConsumer : IConsumer<ClientCreateEvent>
     {
         private readonly IClientApplication _clientService;
 
@@ -14,15 +14,8 @@ namespace FIAP.TechChallenge.UserHub.Api.Events
             _clientService = clientService;
         }
 
-        public async Task Consume(ConsumeContext<ClientCreateDto> context)
-        {
-            //var dto = context.Message;
-
-            //// Exemplo de uso
-            //var exists = await _clientService.GetClientByEmailAsync(dto.Email);
-            //if (exists != null)
-            //    return;
-
+        public async Task Consume(ConsumeContext<ClientCreateEvent> context)
+        {    
             await _clientService.AddClientAsync(context.Message);
         }
     }

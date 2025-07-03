@@ -13,8 +13,7 @@ namespace FIAP.TechChallenge.UserHub.Application
         public static IServiceCollection AddApplicationDependency(this IServiceCollection service)
         {
             service.AddScoped<IEmployeeApplication, EmployeeApplication>();
-            service.AddScoped<IClientApplication, ClientApplication>();
-            service.AddScoped<ITokenApplication, TokenApplication>();
+            service.AddScoped<IClientApplication, ClientApplication>();    
 
             return service;
         }

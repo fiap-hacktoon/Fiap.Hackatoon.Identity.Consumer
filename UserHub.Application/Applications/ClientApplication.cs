@@ -13,7 +13,7 @@ namespace FIAP.TechChallenge.UserHub.Application.Applications
 
         private readonly ILogger<ClientApplication> _logger = logger;
 
-        public async Task AddClientAsync(ClientCreateDto clientDto)
+        public async Task AddClientAsync(ClientCreateEvent clientDto)
         {
             try
             {
@@ -37,18 +37,17 @@ namespace FIAP.TechChallenge.UserHub.Application.Applications
             }
         }
 
-        public async Task UpdateClientAsync(ClientUpdateDto clientDto)
+        public async Task UpdateClientAsync(ClientUpdateEvent clientDto)
         {
             try
             {
-                var client = new Client
-                {
-                    Name = clientDto.Name,
-                    Creation = DateTime.Now,
-                    Document = clientDto.Document,
-                    Email = clientDto.Email,
-                    TypeRole = (int)clientDto.TypeRole
-                };
+                var client = await _contactService.GetByIdAsync(clientDto.Id);
+
+                client.Document = clientDto.Document;
+                client.Birth = clientDto.Birth;
+                client.Email = clientDto.Email;
+                client.Name = clientDto.Name;
+
 
                 await _contactService.UpdateAsync(client);
 
