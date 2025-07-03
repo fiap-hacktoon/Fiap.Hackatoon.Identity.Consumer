@@ -5,12 +5,6 @@ set -e  # Encerra o script em caso de erro
 echo "🔐 Aplicando Secret da aplicação..."
 kubectl apply -f app-secrets.yaml  # Adiciona o Secret
 
-echo "🐬 Subindo MySQL Deployment..."
-kubectl apply -f MySqlDeployment.yaml  # Aplica o MySQL Deployment
-
-echo "🌐 Subindo MySQL Service..."
-kubectl apply -f MySqlService.yaml  # Aplica o MySQL Service
-
 echo "⚙️ Aplicando ConfigMap da aplicação..."
 kubectl apply -f Configmap.yaml  # Aplica o ConfigMap
 
@@ -19,15 +13,5 @@ kubectl apply -f Deployment.yaml  # Aplica o Deployment da aplicação
 
 echo "🚪 Aplicando Service da aplicação..."
 kubectl apply -f Service.yaml  # Aplica o Service da aplicação
-
-echo "🚪 Aplicando Rabbitmq Deployment.."
-kubectl apply -f RabbitmqDeployment.yaml  # Aplica o Service da aplicação
-
-echo "🚪 Aplicando Rabbitmq Service..."
-kubectl apply -f RabbitmqService.yaml  # Aplica o Service da aplicação
-
-# Aplicando o HPA
-echo "📈 Aplicando Horizontal Pod Autoscaler (HPA)..."
-kubectl apply -f hpa.yaml  # Aplica o HPA a partir do arquivo hpa.yaml
 
 echo "✅ Tudo aplicado com sucesso!"

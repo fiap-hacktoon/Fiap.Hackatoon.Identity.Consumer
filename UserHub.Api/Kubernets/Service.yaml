@@ -9,7 +9,7 @@ spec:
   ports:
     - protocol: TCP
       port: 80          # Porta acessada internamente
-      targetPort: 8080  # Porta do container
+      targetPort: 8082  # Porta do container
   type: ClusterIP
 ---
 # Service NodePort: Acesso externo básico (com IP do nó)
@@ -23,8 +23,8 @@ spec:
   ports:
     - protocol: TCP
       port: 80           # Porta acessada externamente
-      targetPort: 8080   # Porta do container
-      nodePort: 30080    # Porta exposta no nó (opcional)
+      targetPort: 8082   # Porta do container
+      nodePort: 30082    # Porta exposta no nó (opcional)
   type: NodePort
 ---
 # Service LoadBalancer: Acesso externo gerenciado (em nuvem)
@@ -37,6 +37,6 @@ spec:
     app: identity-consumer-api
   ports:
     - protocol: TCP
-      port: 5000           # Porta do serviço
-      targetPort: 8080   # Porta do container
+      port: 5002           # Porta do serviço
+      targetPort: 8082   # Porta do container
   type: LoadBalancer
