@@ -149,7 +149,7 @@ app.UseListaUserMiddleware();
 app.UseHealthChecks("/health");
 app.UseHttpMetrics();
 app.MapMetrics();
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 

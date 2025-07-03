@@ -5,7 +5,7 @@ metadata:
   annotations:
     autor: Marcelo Cedro
 spec:
-  replicas: 3  # Número de réplicas (pods) da aplicação
+  replicas: 1  # Número de réplicas (pods) da aplicação
   selector:
     matchLabels:
       app: identity-consumer-api
@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
       - name: identity-consumer-api
-        image: rmahlow/fiaphackatoonidentityconsumerapi:2.0  # Imagem Docker da sua API
+        image: rmahlow/fiaphackatoonidentityconsumerapi:3.0  # Imagem Docker da sua API
         ports:
-        - containerPort: 8080  # Porta exposta dentro do container
+        - containerPort: 8082  # Porta exposta dentro do container
         resources:
           limits:
             cpu: "0.5"        # Limite máximo de CPU
@@ -49,7 +49,7 @@ spec:
             secretKeyRef:
               name: identity-api-consumer-secrets
               key: Password              
-        - name: MassTransit__HostName
+        - name: MassTransit__Server
           valueFrom:
             configMapKeyRef: 
               name: identity-consumer-configmap
@@ -82,10 +82,10 @@ spec:
 
         # 🩺 Liveness Probe: Verifica se o container ainda está saudável
         # Se falhar consecutivamente, o pod será reiniciado
-        livenessProbe:
-          httpGet:
-            path: /health  # Endpoint da sua API que indica saúde
-            port: 8080     # Porta onde o serviço está ouvindo
-          initialDelaySeconds: 15  # Tempo inicial de espera antes de iniciar o primeiro check
-          periodSeconds: 10        # Frequência com que o check será feito
-          failureThreshold: 3      # Número de falhas consecutivas antes de reiniciar o pod
+        # livenessProbe:
+        #   httpGet:
+        #     path: /health  # Endpoint da sua API que indica saúde
+        #     port: 8020     # Porta onde o serviço está ouvindo
+        #   initialDelaySeconds: 15  # Tempo inicial de espera antes de iniciar o primeiro check
+        #   periodSeconds: 10        # Frequência com que o check será feito
+        #   failureThreshold: 3      # Número de falhas consecutivas antes de reiniciar o pod
