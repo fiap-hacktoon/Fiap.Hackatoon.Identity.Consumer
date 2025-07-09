@@ -3,12 +3,13 @@ using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
 using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Enumerators;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Interfaces.Elastic;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 
 namespace FIAP.TechChallenge.UserHub.Application.Applications
 {
-    public class EmployeeApplication(IEmployeeService employeeService, ILogger<EmployeeApplication> logger) : IEmployeeApplication
+    public class EmployeeApplication(IEmployeeService employeeService, ILogger<EmployeeApplication> logger, IElasticClient<Employee> elasticClient) : IEmployeeApplication
     {
         private readonly IEmployeeService _employeeService = employeeService;
 
@@ -124,7 +125,9 @@ namespace FIAP.TechChallenge.UserHub.Application.Applications
                 };
 
                 await _employeeService.AddEmployeeAsync(employee);
-                
+                await elasticClient.Create(employee, "employee");
+
+
             }
             catch (Exception e)
             {
@@ -140,9 +143,10 @@ namespace FIAP.TechChallenge.UserHub.Application.Applications
 
                 employee.Email = employeeDto.Email;
                 employee.Name = employeeDto.Name;
-                employee.TypeRole = employee.TypeRole;                
+                employee.TypeRole = (int)employeeDto.TypeRole;                
 
                 await _employeeService.UpdateEmployeeAsync(employee);
+                await elasticClient.Update(employee, "employee");
             }
             catch (Exception e)
             {

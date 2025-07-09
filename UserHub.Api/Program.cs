@@ -2,6 +2,7 @@
 using FIAP.TechChallenge.UserHub.Api.IoC;
 using FIAP.TechChallenge.UserHub.Api.Logging;
 using FIAP.TechChallenge.UserHub.Api.Middleware;
+using FIAP.TechChallenge.UserHub.Infrastructure.ElasticSearch;
 using MassTransit;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using System.Drawing;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<ElasticSettings>(builder.Configuration.GetSection("ElasticSettings"));
 builder.Services.AddDependencyResolver(builder.Configuration.GetConnectionString("DefaultConnection"));
 
 builder.Services.AddControllers();

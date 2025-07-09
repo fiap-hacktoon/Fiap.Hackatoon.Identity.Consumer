@@ -2,14 +2,15 @@
 using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
 using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Interfaces.Elastic;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 
 namespace FIAP.TechChallenge.UserHub.Application.Applications
 {
-    public class ClientApplication(IClientService contactService, ILogger<ClientApplication> logger) : IClientApplication
+    public class ClientApplication(IClientService contactService, ILogger<ClientApplication> logger, IElasticClient<Client> elasticClient) : IClientApplication
     {
-        private readonly IClientService _contactService = contactService;
+        private readonly IClientService _contactService = contactService;        
 
         private readonly ILogger<ClientApplication> _logger = logger;
 
@@ -28,7 +29,10 @@ namespace FIAP.TechChallenge.UserHub.Application.Applications
                 };
 
                 await _contactService.AddAsync(client);
-                
+
+                await elasticClient.Create(client, "client");
+
+
             }
             catch (Exception e)
             {
@@ -50,6 +54,9 @@ namespace FIAP.TechChallenge.UserHub.Application.Applications
 
 
                 await _contactService.UpdateAsync(client);
+
+                await elasticClient.Update(client, "client");                
+
 
             }
             catch (Exception e)

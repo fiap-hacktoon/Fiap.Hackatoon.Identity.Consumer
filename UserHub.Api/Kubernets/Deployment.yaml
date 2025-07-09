@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: identity-consumer-api
-        image: rmahlow/fiaphackatoonidentityconsumerapi:3.0  # Imagem Docker da sua API
+        image: rmahlow/fiaptechchallengeuserhubapi:1.0  # Imagem Docker da sua API
         ports:
         - containerPort: 8082  # Porta exposta dentro do container
         resources:
@@ -29,11 +29,23 @@ spec:
 
         # Variáveis de ambiente injetadas via Secret
         env:
+        - name: ASPNETCORE_URLS
+          value: "http://+:8082"
         - name: ConnectionStrings__DefaultConnection
           valueFrom:
             secretKeyRef:
               name: identity-api-consumer-secrets
               key: DefaultConnection
+        - name: ElasticSettings__ApiKey
+          valueFrom:
+            secretKeyRef:
+              name: identity-api-consumer-secrets
+              key: ApiKey
+        - name: ElasticSettings__CloudId
+          valueFrom:
+            secretKeyRef:
+              name: identity-api-consumer-secrets
+              key: CloudId
         - name: SecretJWT
           valueFrom:
             secretKeyRef:
