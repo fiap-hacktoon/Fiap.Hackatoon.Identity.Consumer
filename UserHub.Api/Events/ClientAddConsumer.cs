@@ -1,5 +1,4 @@
 ﻿using Fiap.Hackatoon.Shared.Dto;
-using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
 using MassTransit;
 
