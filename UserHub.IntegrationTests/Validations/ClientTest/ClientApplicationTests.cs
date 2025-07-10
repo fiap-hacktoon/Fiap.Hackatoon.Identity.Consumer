@@ -1,5 +1,7 @@
 ﻿using FIAP.TechChallenge.UserHub.Application.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Interfaces.Elastic;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Repositories;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Services;
 using FIAP.TechChallenge.UserHub.Domain.Services;
@@ -19,6 +21,7 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.ClientTest
         private Mock<ILogger<ClientService>> _loggerServiceMock;
         private Mock<ILogger<ClientApplication>> _loggerApplicationMock;
         public readonly Random RandomId;
+        private Mock<IElasticClient<Client>> _elasticClientMock;
 
         public ClientApplicationTests()
         {
@@ -26,8 +29,9 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.ClientTest
             _loggerServiceMock = new Mock<ILogger<ClientService>>();
             _loggerApplicationMock = new Mock<ILogger<ClientApplication>>();
             _contactService = new ClientService(_contactRepository, _loggerServiceMock.Object);
-            _contactApplication = new ClientApplication(_contactService, _loggerApplicationMock.Object);
-            _contactApplicationException = new ClientApplication(null, _loggerApplicationMock.Object);
+            _elasticClientMock = new Mock<IElasticClient<Client>>();
+            _contactApplication = new ClientApplication(_contactService, _loggerApplicationMock.Object, _elasticClientMock.Object);
+            _contactApplicationException = new ClientApplication(null, _loggerApplicationMock.Object, _elasticClientMock.Object);
             RandomId = new Random();
         }
 
@@ -92,36 +96,5 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.ClientTest
             Assert.NotNull(contactList);
             Assert.Equal(contactList.Id, contact2.Id);
         }
-
-        //[Fact]
-        //public async Task GetContactByAreaCodeExceptionAsync()
-        //{
-        //    var contact1 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
-        //    var contact2 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
-        //    var contact3 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
-
-        //    await _context.AddRangeAsync(contact1, contact2, contact3);
-
-        //    await SaveChanges();
-
-        //    var contactList = await _contactApplicationException.GetContactsByAreaCodeAsync(contact2.AreaCode);
-        //    Assert.Null(contactList);
-        //}
-
-        //[Fact]
-        //public async Task GetContactByAreaCodeSuccessAsync()
-        //{
-        //    var contact1 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
-        //    var contact2 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
-        //    var contact3 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
-
-        //    await _context.AddRangeAsync(contact1, contact2, contact3);
-
-        //    await SaveChanges();
-
-        //    var contactList = await _contactApplication.GetContactsByAreaCodeAsync(contact2.AreaCode);
-        //    Assert.NotNull(contactList);
-        //    Assert.NotEmpty(contactList);
-        //}
     }
 }

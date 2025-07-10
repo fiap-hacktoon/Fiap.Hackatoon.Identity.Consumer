@@ -43,8 +43,7 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.Events
                 TypeRole = TypeRole.Client,
                 Name = "Fail Test",
                 Email = "fail@example.com",
-                Document = "00000000000",
-                Password = "fail",
+                Document = "00000000000",                
                 Birth = new DateOnly(1985, 5, 15)
             };
 

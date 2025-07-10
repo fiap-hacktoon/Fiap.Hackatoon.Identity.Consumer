@@ -15,7 +15,7 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.ApplicationTests
         private Mock<IClientService> _clientServiceMock;
         private Mock<ILogger<ClientApplication>> _loggerMock;
         private ClientApplication _clientApplication;
-        private Mock<IElasticClient<Client>> _elasticClientMock;        
+        private Mock<IElasticClient<Client>> _elasticClientMock;
 
         public ClientApplicationTests()
         {

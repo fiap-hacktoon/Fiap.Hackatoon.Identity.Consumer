@@ -17,7 +17,7 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.Events
 
             var evt = new EmployeeCreateEvent
             {
-                TypeRole = TypeRole.Employee,
+                TypeRole = TypeRole.Attendant,
                 Name = "New Employee",
                 Email = "employee@example.com",
                 Password = "emp123",
@@ -40,7 +40,7 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.Events
 
             var evt = new EmployeeCreateEvent
             {
-                TypeRole = TypeRole.Employee,
+                TypeRole = TypeRole.Client,
                 Name = "Fail Emp",
                 Email = "fail@emp.com",
                 Password = "fail"

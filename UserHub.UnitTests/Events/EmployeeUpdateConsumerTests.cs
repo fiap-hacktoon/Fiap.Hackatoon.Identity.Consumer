@@ -20,12 +20,9 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.Events
 
             var evt = new EmployeeUpdateEvent
             {
-                TypeRole = TypeRole.Employee,
+                TypeRole = TypeRole.Kitchen,
                 Name = "Updated Emp",
-                Email = "updated@emp.com",
-                Document = "98765432100",
-                Password = "newpass",
-                Birth = new DateOnly(1988, 11, 20)
+                Email = "updated@emp.com"
             };
 
             var context = new Mock<ConsumeContext<EmployeeUpdateEvent>>();
@@ -44,12 +41,9 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.Events
 
             var evt = new EmployeeUpdateEvent
             {
-                TypeRole = TypeRole.Employee,
+                TypeRole = TypeRole.Manager,
                 Name = "Fail Emp",
-                Email = "fail@emp.com",
-                Document = "98765432100",
-                Password = "fail",
-                Birth = new DateOnly(1988, 11, 20)
+                Email = "fail@emp.com"
             };
 
             var context = new Mock<ConsumeContext<EmployeeUpdateEvent>>();

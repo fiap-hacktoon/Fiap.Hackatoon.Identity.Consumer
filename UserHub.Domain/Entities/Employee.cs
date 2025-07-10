@@ -1,5 +1,4 @@
-﻿using FIAP.TechChallenge.UserHub.Domain.Enumerators;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 
 namespace FIAP.TechChallenge.UserHub.Domain.Entities

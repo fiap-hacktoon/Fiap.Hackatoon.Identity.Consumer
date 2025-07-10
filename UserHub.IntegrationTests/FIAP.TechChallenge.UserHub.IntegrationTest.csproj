@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\UserHub.Api\FIAP.TechChallenge.UserHub.Api.csproj" />
     <ProjectReference Include="..\UserHub.Application\FIAP.TechChallenge.UserHub.Application.csproj" />
+    <ProjectReference Include="..\UserHub.Domain\FIAP.TechChallenge.UserHub.Domain.csproj" />
     <ProjectReference Include="..\UserHub.Infrastructure\FIAP.TechChallenge.UserHub.Infrastructure.csproj" />
   </ItemGroup>
 
