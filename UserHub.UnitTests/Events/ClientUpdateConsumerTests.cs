@@ -21,7 +21,6 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.Events
                 Name = "Updated Client",
                 Email = "update@example.com",
                 Document = "12345678900",
-                Password = "newpass",
                 Birth = new DateOnly(1985, 5, 15)
             };
 

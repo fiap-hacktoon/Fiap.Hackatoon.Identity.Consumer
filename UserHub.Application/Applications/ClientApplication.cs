@@ -8,7 +8,10 @@ using Microsoft.Extensions.Logging;
 
 namespace FIAP.TechChallenge.UserHub.Application.Applications
 {
-    public class ClientApplication(IClientService contactService, ILogger<ClientApplication> logger, IElasticClient<Client> elasticClient) : IClientApplication
+    public class ClientApplication(
+        IClientService contactService, 
+        ILogger<ClientApplication> logger, 
+        IElasticClient<Client> elasticClient) : IClientApplication
     {
         private readonly IClientService _contactService = contactService;        
 
