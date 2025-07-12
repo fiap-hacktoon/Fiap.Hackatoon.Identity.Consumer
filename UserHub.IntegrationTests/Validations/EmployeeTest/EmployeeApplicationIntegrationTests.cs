@@ -1,5 +1,7 @@
 ﻿using FIAP.TechChallenge.UserHub.Application.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Interfaces.Elastic;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Repositories;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Services;
 using FIAP.TechChallenge.UserHub.Domain.Services;
@@ -10,7 +12,7 @@ using Moq;
 
 namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
 {
-    public class EmployeeApplicationTests : BaseServiceTests
+    public class EmployeeApplicationIntegrationTests : BaseServiceTests
     {
         private readonly IEmployeeService _contactService;
         private readonly IEmployeeApplication _contactApplicationException;
@@ -19,15 +21,17 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
         private Mock<ILogger<EmployeeService>> _loggerServiceMock;
         private Mock<ILogger<EmployeeApplication>> _loggerApplicationMock;
         public readonly Random RandomId;
+        private Mock<IElasticClient<Employee>> _elasticEmployeeMock;
 
-        public EmployeeApplicationTests()
+        public EmployeeApplicationIntegrationTests()
         {
             _contactRepository = new EmployeeRepository(_context);
             _loggerServiceMock = new Mock<ILogger<EmployeeService>>();
             _loggerApplicationMock = new Mock<ILogger<EmployeeApplication>>();
             _contactService = new EmployeeService(_contactRepository, _loggerServiceMock.Object);
-            _contactApplication = new EmployeeApplication(_contactService, _loggerApplicationMock.Object);
-            _contactApplicationException = new EmployeeApplication(null, _loggerApplicationMock.Object);
+            _elasticEmployeeMock = new Mock<IElasticClient<Employee>>();
+            _contactApplication = new EmployeeApplication(_contactService, _loggerApplicationMock.Object, _elasticEmployeeMock.Object);
+            _contactApplicationException = new EmployeeApplication(null, _loggerApplicationMock.Object, _elasticEmployeeMock.Object);
             RandomId = new Random();
         }
 

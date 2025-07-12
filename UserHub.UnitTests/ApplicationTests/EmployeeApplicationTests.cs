@@ -27,45 +27,35 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.ApplicationTests
         [Fact]
         public async Task AddEmployeeAsync_ValidInput_CallsAddAndCreate()
         {
-            var mockService = new Mock<IEmployeeService>();
-            var mockLogger = new Mock<ILogger<EmployeeApplication>>();
-            var mockElastic = new Mock<IElasticClient<Employee>>();
-            var app = new EmployeeApplication(mockService.Object, mockLogger.Object, mockElastic.Object);
-
             var dto = new EmployeeCreateEvent
             {
                 TypeRole = TypeRole.Kitchen,
                 Name = "New Emp",
-                Email = "emp@example.com",                
+                Email = "emp@example.com",
                 Password = "emp123"
             };
 
-            await app.AddEmployeeAsync(dto);
+            await _employeeApplication.AddEmployeeAsync(dto);
 
-            mockService.Verify(s => s.AddEmployeeAsync(It.IsAny<Employee>()), Times.Once);
-            mockElastic.Verify(e => e.Create(It.IsAny<Employee>(), It.IsAny<string>()), Times.Once);
+            _employeeServiceMock.Verify(s => s.AddEmployeeAsync(It.IsAny<Employee>()), Times.Once);
+            _elasticEmployeeMock.Verify(e => e.Create(It.IsAny<Employee>(), It.IsAny<string>()), Times.Once);
         }
 
         [Fact]
         public async Task AddEmployeeAsync_WhenServiceThrows_LogsAndThrows()
         {
-            var mockService = new Mock<IEmployeeService>();
-            var mockLogger = new Mock<ILogger<EmployeeApplication>>();
-            var mockElastic = new Mock<IElasticClient<Employee>>();
-            var app = new EmployeeApplication(mockService.Object, mockLogger.Object, mockElastic.Object);
-
             var dto = new EmployeeCreateEvent
             {
                 TypeRole = TypeRole.Attendant,
                 Name = "Error",
-                Email = "error@emp.com",                
+                Email = "error@emp.com",
                 Password = "error"
             };
 
-            mockService.Setup(s => s.AddEmployeeAsync(It.IsAny<Employee>())).ThrowsAsync(new Exception("Insert error"));
+            _employeeServiceMock.Setup(s => s.AddEmployeeAsync(It.IsAny<Employee>())).ThrowsAsync(new Exception("Insert error"));
 
-            await Assert.ThrowsAsync<Exception>(() => app.AddEmployeeAsync(dto));
-            mockLogger.Verify(l => l.Log(
+            await Assert.ThrowsAsync<Exception>(() => _employeeApplication.AddEmployeeAsync(dto));
+            _loggerMock.Verify(l => l.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Ocorreu um erro")),
@@ -76,11 +66,6 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.ApplicationTests
         [Fact]
         public async Task UpdateEmployeeAsync_ValidEmployee_UpdatesSuccessfully()
         {
-            var mockService = new Mock<IEmployeeService>();
-            var mockLogger = new Mock<ILogger<EmployeeApplication>>();
-            var mockElastic = new Mock<IElasticClient<Employee>>();
-            var app = new EmployeeApplication(mockService.Object, mockLogger.Object, mockElastic.Object);
-
             var existing = new Employee { Id = 1, Name = "Old", TypeRole = (int)TypeRole.Client, Creation = DateTime.Now, Email = "email@example.com" };
             var dto = new EmployeeUpdateEvent
             {
@@ -90,37 +75,27 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.ApplicationTests
                 TypeRole = TypeRole.Client
             };
 
-            mockService.Setup(s => s.GetByIdAsync(dto.Id)).ReturnsAsync(existing);
+            _employeeServiceMock.Setup(s => s.GetByIdAsync(dto.Id)).ReturnsAsync(existing);
 
-            await app.UpdateEmployeeAsync(dto);
+            await _employeeApplication.UpdateEmployeeAsync(dto);
 
-            mockService.Verify(s => s.GetByIdAsync(dto.Id), Times.Once);
-            mockService.Verify(s => s.UpdateEmployeeAsync(It.Is<Employee>(e => e.Name == dto.Name && e.Email == dto.Email)), Times.Once);
+            _employeeServiceMock.Verify(s => s.GetByIdAsync(dto.Id), Times.Once);
+            _employeeServiceMock.Verify(s => s.UpdateEmployeeAsync(It.Is<Employee>(e => e.Name == dto.Name && e.Email == dto.Email)), Times.Once);
         }
 
         [Fact]
         public async Task UpdateEmployeeAsync_WhenNotFound_ThrowsException()
         {
-            var mockService = new Mock<IEmployeeService>();
-            var mockLogger = new Mock<ILogger<EmployeeApplication>>();
-            var mockElastic = new Mock<IElasticClient<Employee>>();
-            var app = new EmployeeApplication(mockService.Object, mockLogger.Object, mockElastic.Object);
-
             var dto = new EmployeeUpdateEvent { Id = 99 };
 
-            mockService.Setup(s => s.GetByIdAsync(dto.Id)).ReturnsAsync((Employee)null!);
+            _employeeServiceMock.Setup(s => s.GetByIdAsync(dto.Id)).ReturnsAsync((Employee)null!);
 
-            await Assert.ThrowsAsync<NullReferenceException>(() => app.UpdateEmployeeAsync(dto));
+            await Assert.ThrowsAsync<NullReferenceException>(() => _employeeApplication.UpdateEmployeeAsync(dto));
         }
 
         [Fact]
         public async Task UpdateEmployeeAsync_WhenUpdateThrows_LogsAndThrows()
         {
-            var mockService = new Mock<IEmployeeService>();
-            var mockLogger = new Mock<ILogger<EmployeeApplication>>();
-            var mockElastic = new Mock<IElasticClient<Employee>>();
-            var app = new EmployeeApplication(mockService.Object, mockLogger.Object, mockElastic.Object);
-
             var existing = new Employee { Id = 1, Name = "Old", TypeRole = (int)TypeRole.Client, Creation = DateTime.Now, Email = "email@example.com" };
             var dto = new EmployeeUpdateEvent
             {
@@ -129,17 +104,17 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.ApplicationTests
                 Email = "try@emp.com"
             };
 
-            mockService.Setup(s => s.GetByIdAsync(dto.Id)).ReturnsAsync(existing);
-            mockService.Setup(s => s.UpdateEmployeeAsync(It.IsAny<Employee>())).ThrowsAsync(new Exception("Update failed"));
+            _employeeServiceMock.Setup(s => s.GetByIdAsync(dto.Id)).ReturnsAsync(existing);
+            _employeeServiceMock.Setup(s => s.UpdateEmployeeAsync(It.IsAny<Employee>())).ThrowsAsync(new Exception("Update failed"));
 
-            await Assert.ThrowsAsync<Exception>(() => app.UpdateEmployeeAsync(dto));
-            mockLogger.Verify(l => l.Log(
+            await Assert.ThrowsAsync<Exception>(() => _employeeApplication.UpdateEmployeeAsync(dto));
+            _loggerMock.Verify(l => l.Log(
                 LogLevel.Error,
                 It.IsAny<EventId>(),
                 It.Is<It.IsAnyType>((v, t) => v.ToString().Contains("Ocorreu um erro")),
                 It.IsAny<Exception>(),
                 It.IsAny<Func<It.IsAnyType, Exception, string>>()), Times.Once);
-        }
+        }        
 
         #region GET
         [Fact]
