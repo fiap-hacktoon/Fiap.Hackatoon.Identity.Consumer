@@ -6,30 +6,30 @@ using FIAP.TechChallenge.UserHub.IntegrationTest.Config;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
+namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.ClientTest
 {
-    public class EmployeeServiceTests : BaseServiceTests
+    public class ClientServiceIntegrationTests : BaseServiceTests
     {
-        private readonly IEmployeeService _contactService;
-        private readonly IEmployeeService _contactServiceException;
-        private readonly IEmployeeRepository _contactRepository;
-        private Mock<ILogger<EmployeeService>> _loggerMock;
+        private readonly IClientService _contactService;
+        private readonly IClientService _contactServiceException;
+        private readonly IClientRepository _contactRepository;
+        private Mock<ILogger<ClientService>> _loggerMock;
         public readonly Random RandomId;
 
-        public EmployeeServiceTests()
+        public ClientServiceIntegrationTests()
         {
-            _contactRepository = new EmployeeRepository(_context);
-            _loggerMock = new Mock<ILogger<EmployeeService>>();
-            _contactService = new EmployeeService(_contactRepository, _loggerMock.Object);
-            _contactServiceException = new EmployeeService(null, _loggerMock.Object);
+            _contactRepository = new ClientRepository(_context);
+            _loggerMock = new Mock<ILogger<ClientService>>();
+            _contactService = new ClientService(_contactRepository, _loggerMock.Object);
+            _contactServiceException = new ClientService(null, _loggerMock.Object);
             RandomId = new Random();
         }
 
         [Fact]
         public async Task GetByIdContactSuccessAsync()
         {
-            var contact1 = EmployeeFixtures.CreateFakeContact(RandomId.Next(999999999));
-            var contact2 = EmployeeFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact1 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact2 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
 
             await _context.AddRangeAsync(contact1, contact2);
 
@@ -51,7 +51,7 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
         [Fact]
         public async Task GetByIdContactExceptionAsync()
         {
-            var contact = EmployeeFixtures.CreateFakeContact(0);
+            var contact = ClientFixtures.CreateFakeContact(0);
             var exception = await Assert.ThrowsAsync<Exception>(async () => await _contactServiceException.GetByIdAsync(contact.Id));
             Assert.Equal($"Some error occour when trying to get a contact with Id: {contact.Id} Contact.", exception.Message);
         }
@@ -59,9 +59,9 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
         [Fact]
         public async Task GetAllContactSuccessAsync()
         {
-            var contact1 = EmployeeFixtures.CreateFakeContact(RandomId.Next(999999999));
-            var contact2 = EmployeeFixtures.CreateFakeContact(RandomId.Next(999999999));
-            var contact3 = EmployeeFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact1 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact2 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
+            var contact3 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
 
             await _context.AddRangeAsync(contact1, contact2, contact3);
 
@@ -83,7 +83,7 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
         [Fact]
         public async Task GetAllContactExceptionAsync()
         {
-            var contact = EmployeeFixtures.CreateFakeContact(0);
+            var contact = ClientFixtures.CreateFakeContact(0);
             var exception = await Assert.ThrowsAsync<Exception>(async () => await _contactServiceException.GetAllAsync());
             Assert.Equal($"Some error occour when trying to get all contacts in database.", exception.Message);
         }
@@ -91,9 +91,9 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
         //[Fact]
         //public async Task GetByAreaCodeSuccessAsync()
         //{
-        //    var contact1 = EmployeeFixtures.CreateFakeContact(RandomId.Next(999999999));
-        //    var contact2 = EmployeeFixtures.CreateFakeContact(RandomId.Next(999999999));
-        //    var contact3 = EmployeeFixtures.CreateFakeContact(RandomId.Next(999999999));
+        //    var contact1 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
+        //    var contact2 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
+        //    var contact3 = ClientFixtures.CreateFakeContact(RandomId.Next(999999999));
 
         //    await _context.AddRangeAsync(contact1, contact2, contact3);
 
@@ -115,7 +115,7 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
         //[Fact]
         //public async Task GetByAreaCodeExceptionAsync()
         //{
-        //    var contact = EmployeeFixtures.CreateFakeContact(0);
+        //    var contact = ClientFixtures.CreateFakeContact(0);
         //    var exception = await Assert.ThrowsAsync<Exception>(async () => await _contactServiceException.GetByAreaCodeAsync("ERROR"));
         //    Assert.Equal($"Some error occour when trying to get a contact by Area Code with Code: ERROR Contact.", exception.Message);
         //}

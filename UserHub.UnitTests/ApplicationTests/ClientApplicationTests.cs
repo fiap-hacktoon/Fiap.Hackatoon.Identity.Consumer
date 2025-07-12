@@ -1,6 +1,5 @@
 ﻿using Fiap.Hackatoon.Shared.Dto;
 using FIAP.TechChallenge.UserHub.Application.Applications;
-using FIAP.TechChallenge.UserHub.Domain.DTOs.EntityDTOs;
 using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Enumerators;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Elastic;
