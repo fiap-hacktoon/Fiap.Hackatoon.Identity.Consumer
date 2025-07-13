@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: identity-consumer-api
-        image: rmahlow/fiaptechchallengeuserhubapi:1.0  # Imagem Docker da sua API
+        image: rmahlow/fiaptechchallengeuserhubapi:latest  # Imagem Docker da sua API
         ports:
         - containerPort: 8082  # Porta exposta dentro do container
         resources:
