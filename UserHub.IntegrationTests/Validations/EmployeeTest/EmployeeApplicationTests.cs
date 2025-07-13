@@ -1,5 +1,7 @@
 ﻿using FIAP.TechChallenge.UserHub.Application.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Interfaces.Elastic;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Repositories;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Services;
 using FIAP.TechChallenge.UserHub.Domain.Services;
@@ -18,6 +20,7 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
         private readonly IEmployeeRepository _contactRepository;
         private Mock<ILogger<EmployeeService>> _loggerServiceMock;
         private Mock<ILogger<EmployeeApplication>> _loggerApplicationMock;
+        private Mock<IElasticClient<Employee>> _elasticClientMock;
         public readonly Random RandomId;
 
         public EmployeeApplicationTests()
@@ -26,8 +29,9 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.EmployeeTest
             _loggerServiceMock = new Mock<ILogger<EmployeeService>>();
             _loggerApplicationMock = new Mock<ILogger<EmployeeApplication>>();
             _contactService = new EmployeeService(_contactRepository, _loggerServiceMock.Object);
-            _contactApplication = new EmployeeApplication(_contactService, _loggerApplicationMock.Object);
-            _contactApplicationException = new EmployeeApplication(null, _loggerApplicationMock.Object);
+            _elasticClientMock = new Mock<IElasticClient<Employee>>();
+            _contactApplication = new EmployeeApplication(_contactService, _loggerApplicationMock.Object, _elasticClientMock.Object);
+            _contactApplicationException = new EmployeeApplication(null, _loggerApplicationMock.Object, _elasticClientMock.Object);
             RandomId = new Random();
         }
 

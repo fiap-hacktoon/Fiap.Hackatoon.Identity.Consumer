@@ -1,5 +1,6 @@
 ﻿using FIAP.TechChallenge.UserHub.Application.Applications;
 using FIAP.TechChallenge.UserHub.Domain.Entities;
+using FIAP.TechChallenge.UserHub.Domain.Interfaces.Elastic;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -11,12 +12,15 @@ namespace FIAP.TechChallenge.UserHub.UnitTests.ApplicationTests
         private Mock<IClientService> _clientServiceMock;
         private Mock<ILogger<ClientApplication>> _loggerMock;
         private ClientApplication _clientApplication;
+        private Mock<IElasticClient<Client>> _elasticClientMock;
+
 
         public ClientApplicationTests()
         {
             _clientServiceMock = new Mock<IClientService>();
             _loggerMock = new Mock<ILogger<ClientApplication>>();
-            _clientApplication = new ClientApplication(_clientServiceMock.Object, _loggerMock.Object);
+            _elasticClientMock = new Mock<IElasticClient<Client>>();
+            _clientApplication = new ClientApplication(_clientServiceMock.Object, _loggerMock.Object, _elasticClientMock.Object);
         }
 
         [Fact]

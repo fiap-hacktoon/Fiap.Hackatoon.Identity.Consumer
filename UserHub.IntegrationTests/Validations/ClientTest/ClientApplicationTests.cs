@@ -1,5 +1,7 @@
 ﻿using FIAP.TechChallenge.UserHub.Application.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Entities;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Applications;
+using FIAP.TechChallenge.UserHub.Domain.Interfaces.Elastic;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Repositories;
 using FIAP.TechChallenge.UserHub.Domain.Interfaces.Services;
 using FIAP.TechChallenge.UserHub.Domain.Services;
@@ -18,6 +20,8 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.ClientTest
         private readonly IClientRepository _contactRepository;
         private Mock<ILogger<ClientService>> _loggerServiceMock;
         private Mock<ILogger<ClientApplication>> _loggerApplicationMock;
+        private Mock<IElasticClient<Client>> _elasticClientMock;
+
         public readonly Random RandomId;
 
         public ClientApplicationTests()
@@ -26,8 +30,9 @@ namespace FIAP.TechChallenge.UserHub.IntegrationTest.Validations.ClientTest
             _loggerServiceMock = new Mock<ILogger<ClientService>>();
             _loggerApplicationMock = new Mock<ILogger<ClientApplication>>();
             _contactService = new ClientService(_contactRepository, _loggerServiceMock.Object);
-            _contactApplication = new ClientApplication(_contactService, _loggerApplicationMock.Object);
-            _contactApplicationException = new ClientApplication(null, _loggerApplicationMock.Object);
+            _elasticClientMock = new Mock<IElasticClient<Client>>();
+            _contactApplication = new ClientApplication(_contactService, _loggerApplicationMock.Object, _elasticClientMock.Object);
+            _contactApplicationException = new ClientApplication(null, _loggerApplicationMock.Object, _elasticClientMock.Object);
             RandomId = new Random();
         }
 
