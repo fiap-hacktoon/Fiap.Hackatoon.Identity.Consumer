@@ -1,30 +1,31 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# Use the official .NET 8 SDK image as the build environment
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
+# Set the working directory
 WORKDIR /app
-EXPOSE 8082
-ENV ASPNETCORE_URLS=http://*:8082
-ENV ASPNETCORE_ENVIRONMENT=Development
 
+# Copy the project files
+COPY . ./
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
-COPY ["UserHub.Api/FIAP.TechChallenge.UserHub.Api.csproj", "UserHub.Api/"]
-COPY ["UserHub.Application/FIAP.TechChallenge.UserHub.Application.csproj", "UserHub.Application/"]
-COPY ["UserHub.Domain/FIAP.TechChallenge.UserHub.Domain.csproj", "UserHub.Domain/"]
-COPY ["UserHub.Infrastructure/FIAP.TechChallenge.UserHub.Infrastructure.csproj", "UserHub.Infrastructure/"]
-RUN dotnet restore "./UserHub.Api/FIAP.TechChallenge.UserHub.Api.csproj"
-COPY . .
-WORKDIR "/src/UserHub.Api"
-RUN dotnet build "./FIAP.TechChallenge.UserHub.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+# Restore the dependencies
+RUN dotnet restore
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./FIAP.TechChallenge.UserHub.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+# Build the project
+RUN dotnet publish -c Release -o out
 
-FROM base AS final
+# Use the official .NET 8 runtime image as the runtime environment
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+# Set the working directory
 WORKDIR /app
-COPY --from=publish /app/publish .
+
+# Copy the build output from the build environment
+COPY --from=build-env /app/out .
+
+# Expose the port the app runs on
+EXPOSE 8093
+
+ENV ASPNETCORE_ENVIRONMENT=Docker
+
+# Set the entry point for the container
 ENTRYPOINT ["dotnet", "FIAP.TechChallenge.UserHub.Api.dll"]
